@@ -42,6 +42,7 @@ StdLocalFileSystem::~StdLocalFileSystem() {
 }
 
 //DECLARE_PERF_TIMER(StdLocalFileSystem_openFile)
+static std::filesystem::path fixFilenameFromWindowsPath(const Char *filename, Int access)
 {
 	std::string fixedFilename(filename);
 
@@ -126,7 +127,9 @@ StdLocalFileSystem::~StdLocalFileSystem() {
 #endif
 
 	return path;
+}
 
+File * StdLocalFileSystem::openFile(const Char *filename, Int access /* = 0 */)
 {
 	//USE_PERF_TIMER(StdLocalFileSystem_openFile)
 	StdLocalFile *file = newInstance( StdLocalFile );
@@ -270,7 +273,6 @@ void StdLocalFileSystem::getFileListInDirectory(const AsciiString& currentDirect
 		while (!done) {
 			if(iter->is_directory() && 
 				(strcmp(iter->path().filename().string().c_str(), ".") && strcmp(iter->path().string().c_str(), ".."))) {
-					AsciiString tempsearchstr;
 				AsciiString tempsearchstr;
 			tempsearchstr = iter->path().filename().string().c_str();
 
